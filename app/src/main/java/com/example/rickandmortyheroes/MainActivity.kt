@@ -25,15 +25,16 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, MainFactory(application))
             .get(MyViewModel::class.java)
 
-        //val ERROR_IN_NAME: String = resources.getText(R.string.no_name).toString()
+        val ERROR_IN_NAME: String = resources.getText(R.string.no_name).toString()
+        viewModel.nameLiveData.observe(this ){
+            if (viewModel.nameLiveData.value == null)
+                Toast.makeText(applicationContext, ERROR_IN_NAME, Toast.LENGTH_SHORT).show()
+            else binding!!.recyclerView.adapter =
+                CustomRecyclerAdapter(viewModel.nameLiveData.value!!)
+        }
+        binding!!.upd.setOnClickListener{
+            viewModel.getData()
+        }
 
-        //viewModel.nameLiveData.observe(this ){
-        //    if (viewModel.nameLiveData.value == null)
-        //        Toast.makeText(applicationContext, ERROR_IN_NAME, Toast.LENGTH_SHORT).show()
-        //    else binding!!.recyclerView.adapter =
-        //        CustomRecyclerAdapter(viewModel.nameLiveData.value!!)
-        //}
-        val name = mutableListOf<String>("rick","morthy","pidor")
-        binding!!.recyclerView.adapter = CustomRecyclerAdapter(name)
     }
 }
